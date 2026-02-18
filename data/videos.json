@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Blade Runner",
+    "genre": "Sci-Fi",
+    "duration": 117,
+    "rating": 9
+  },
+  {
+    "title": "The Godfather",
+    "genre": "Crime",
+    "duration": 175,
+    "rating": 10
+  }
+]
