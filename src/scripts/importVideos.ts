@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
+import fs from "fs"; // fs = filesystem. built in node module.
+import path from "path"; // path is built in node module.
 import { Video } from "../models/video.model";
 
 // Load environment variables
@@ -19,20 +19,33 @@ async function run() {
   await mongoose.connect(MONGO_URI);
 
   // Resolve data file path relative to compiled output
-  const filePath = path.resolve(__dirname, "../../data/videos.json");
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-  const videos = JSON.parse(fileContent);
+  const filePath = path.resolve(__dirname, "../../data/videos.json"); // path.resolve returns absolute path as a string.
+  const fileContent = fs.readFileSync(filePath, "utf-8"); // fs.readFileSync returns a string, because "utf-8" is defined.
+  const videos = JSON.parse(fileContent); // Data becomes an array of JS objects. JSON.parse is offered by JS.
 
   console.log(`Importing ${videos.length} videos...`);
 
   for (const video of videos) {
     // Idempotent upsert based on unique title
     await Video.updateOne(
-      { title: video.title },
-      { $set: video },
-      { upsert: true }
-    );
-
+    {
+      title: video.title,
+      $or: [
+        { sourceUpdatedAt: { $lt: new Date(video.sourceUpdatedAt) } },
+        { sourceUpdatedAt: { $exists: false } }
+      ]
+    },
+    {
+      $set: {
+        title: video.title,
+        genre: video.genre,
+        duration: video.duration,
+        rating: video.rating,
+        sourceUpdatedAt: new Date(video.sourceUpdatedAt)
+      }
+    },
+    { upsert: true }
+  );
     console.log(`Processed: ${video.title}`);
   }
 
