@@ -23,13 +23,13 @@ jobs:
         run: npm run build
 
       - name: Build Docker image
-        run: docker build -t ${{ github.repository }}:${{ github.sha }} .
+        run: docker build -t sebastianvento/cloud-deployed-metadata-service:${{ github.sha }} .
 
       - name: Log in to registry
         run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
 
       - name: Push Docker image
-        run: docker push ${{ github.repository }}:${{ github.sha }}
+        run: docker push sebastianvento/cloud-deployed-metadata-service:${{ github.sha }}
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
@@ -39,7 +39,7 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy viihde-sprint \
-            --image ${{ github.repository }}:${{ github.sha }} \
+            --image sebastianvento/cloud-deployed-metadata-service:${{ github.sha }} \
             --region europe-north1 \
             --platform managed \
             --quiet
