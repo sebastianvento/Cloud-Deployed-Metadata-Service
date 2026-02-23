@@ -10,8 +10,7 @@ export class VideoRepository {
 
   // Retrieves video documents based on query options.
   async findAll(parameters: Partial<VideoQueryOptions>): Promise<PaginatedVideos> {
-    let pageSize = 1;
-    let skipped = (parameters.page- 1) * limit;
+    let skipped = (parameters.page- 1) * parameters.limit;
     let dataset = {
       data: [],
       page: 0,
