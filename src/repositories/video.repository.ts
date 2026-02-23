@@ -2,32 +2,38 @@ import { Video, IVideo, VideoQueryOptions, PaginatedVideos } from "../models/vid
 
 export class VideoRepository {
 
-  // Persists a new video document to MongoDB
   async create(data: Partial<IVideo>): Promise<IVideo> {
     const video = new Video(data);
     return await video.save();
   }
 
-  // Retrieves video documents based on query options.
   async findAll(parameters: Partial<VideoQueryOptions>): Promise<PaginatedVideos> {
-    let skipped = (parameters.page- 1) * parameters.limit;
-    let dataset = {
-      data: [],
-      page: 0,
-      limit: 0,
-      total: 0,
-      totalPages: 0
+    const page = parameters.page ?? 1;
+    const limit = parameters.limit ?? 10;
+    const sortBy = parameters.sortBy ?? "createdAt";
+    const order = parameters.order ?? "desc";
+
+    const skipped = (page - 1) * limit;
+
+    const total = await Video.countDocuments();
+
+    const data = await Video.find()
+      .skip(skipped)
+      .limit(limit)
+      .sort({ [sortBy]: order });
+
+    const dataset: PaginatedVideos = {
+      data,
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
     };
-      dataset.data = await Video.find().skip(skipped).limit(parameters.limit).sort({[parameters.sortBy]: parameters.order});
-      dataset.page = parameters.page;
-      dataset.limit = parameters.limit;
-      dataset.total = await Video.countDocuments();
-      dataset.totalPages = await Video.countDocuments();
 
     return dataset;
   }
 
-  async findOne(id: string): Promise<IVideo|null> {
+  async findOne(id: string): Promise<IVideo | null> {
     return Video.findById(id);
   }
 }

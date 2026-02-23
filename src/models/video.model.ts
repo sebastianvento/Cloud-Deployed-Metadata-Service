@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface PaginatedVideos {
+ export interface PaginatedVideos {
   data: IVideo[];
   page: number;
   limit: number;
