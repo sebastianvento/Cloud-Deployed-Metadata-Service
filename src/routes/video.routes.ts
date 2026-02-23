@@ -11,7 +11,7 @@ router.post("/", (req, res, next) =>
   controller.create(req, res, next)
 );
 // Retrieve video resources
-// Controller returned promise is ignored.
+// Controller returned promise is ignored
 router.get("/", (req, res, next) =>
   controller.findAll(req, res, next)
 );
