@@ -1,0 +1,15 @@
+services:
+  postgres:
+    container_name: viihde-postgres
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: viihde
+      POSTGRES_PASSWORD: viihdepass
+      POSTGRES_DB: legacy_metadata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

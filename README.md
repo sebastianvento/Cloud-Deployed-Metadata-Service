@@ -1,37 +1,80 @@
-# Cloud-Deployed Metadata Service
+# Cloud Deployed Metadata Service – Metadata Service with SQL → MongoDB Migration
 
-Cloud-deployed REST API service built with TypeScript, Express, and MongoDB.  
-Implements a layered architecture and JSON-based ETL ingestion, containerized with Docker and deployed to Google Cloud Run.
+Backend metadata service built with TypeScript, Express, PostgreSQL, and MongoDB Atlas.  
+Implements a layered architecture and an idempotent ETL migration pipeline from a relational legacy schema to a document-based model.
 
 ---
 
 ## Overview
 
-This project demonstrates a backend metadata service designed with clear separation of concerns and production-oriented structure.
+This project simulates migration from an on-prem relational metadata system to a cloud-based MongoDB-backed service.
 
-The service provides:
+The system consists of:
 
-- RESTful API for managing video metadata
-- MongoDB persistence (MongoDB Atlas)
-- JSON-based data ingestion (ETL-style import script)
-- Docker containerization
-- Deployment to Google Cloud Run
+- PostgreSQL (legacy relational source)
+- ETL migration layer (extraction, transformation, load)
+- MongoDB Atlas (target document database)
+- REST API for accessing migrated metadata
+- Dockerized runtime
 
-The focus of the project is architectural clarity, maintainability, and deployment readiness.
+The focus is on:
+
+- Relational-to-document data modeling
+- Deterministic transformation logic
+- Idempotent migration design
+- Clear architectural separation
+
+---
+
+## Migration Design
+
+The PostgreSQL schema models a normalized metadata structure:
+
+- `videos`
+- `genres`
+- `video_genres` (many-to-many relation)
+
+The migration pipeline:
+
+1. Extracts relational rows using SQL JOINs.
+2. Groups rows by video.
+3. Normalizes genre values (trim, lowercase).
+4. Deduplicates logical duplicates.
+5. Preserves `created_at` from source.
+6. Adds migration metadata (`migratedAt`).
+7. Performs idempotent upsert into MongoDB.
+
+MongoDB enforces a compound unique index:
+
+- `{ title, releaseYear }`
+
+Upserts use:
+
+- `$set` for content updates
+- `$setOnInsert` for `migratedAt`
+
+Running the migration multiple times does not create duplicates.
 
 ---
 
 ## Architecture
 
-The application follows a layered architecture:
+Layered architecture:
 
-Route → Controller → Service → Repository → MongoDB
+Route → Controller → Service → Repository → Database
 
 - Routes define HTTP endpoints
-- Controllers handle request/response lifecycle
+- Controllers handle request/response flow
 - Services coordinate business logic
-- Repositories encapsulate data access
-- Models define MongoDB schema via Mongoose
+- Repositories encapsulate database access
+- Models define MongoDB schema (Mongoose)
+
+The migration layer is isolated in:
+
+src/etl/
+transformLegacyVideos.ts
+migrateLegacyVideos.ts
+
 
 ---
 
@@ -40,27 +83,29 @@ Route → Controller → Service → Repository → MongoDB
 - TypeScript
 - Node.js
 - Express
+- PostgreSQL
 - MongoDB Atlas
 - Mongoose
 - Docker
-- Google Cloud Run
+- GitHub Actions (CI)
 
 ---
 
 ## Project Structure
 
 src/
-  app.ts
-  server.ts
-  controllers/
-  services/
-  repositories/
-  models/
-  routes/
-  middleware/
-  scripts/
-data/
+app.ts
+server.ts
+controllers/
+services/
+repositories/
+models/
+routes/
+middleware/
+database/
+etl/
 Dockerfile
+docker-compose.yml
 
 ---
 
@@ -70,17 +115,44 @@ Install dependencies:
 
 npm install
 
+Start development server:
+
+npm run dev
+
 Build:
 
 npm run build
 
-Start:
+---
 
-node dist/server.js
+## Database Setup (Legacy Simulation)
 
-Health check:
+The relational schema is defined in:
 
-curl http://localhost:3000/health
+src/database/schema.sql
+
+It contains:
+
+- Table definitions
+- Seed data with intentionally inconsistent genre values
+
+Apply the schema to PostgreSQL before running migration.
+
+---
+
+## Run Migration
+
+Execute migration:
+
+npm run migrate
+
+The script outputs:
+
+- Rows fetched
+- Unique videos after transform
+- Inserted count
+- Updated count
+- Execution duration
 
 ---
 
@@ -90,17 +162,11 @@ Create a `.env` file:
 
 PORT=3000
 MONGO_URI=your_mongodb_connection_string
-
----
-
-## Data Import (ETL Script)
-
-To import sample data:
-
-npm run build
-node dist/scripts/importVideos.js
-
-The script performs idempotent upsert operations based on video title.
+PGUSER=...
+PGPASSWORD=...
+PGHOST=...
+PGPORT=5432
+PGDATABASE=...
 
 ---
 
@@ -108,18 +174,18 @@ The script performs idempotent upsert operations based on video title.
 
 Build image:
 
-docker build -t metadata-service .
+docker build -t cloud-deployed-metadata-service .
 
 Run container:
 
-docker run -p 3000:3000 --env-file .env metadata-service
+docker run -p 3000:3000 --env-file .env cloud-deployed-metadata-service
 
 ---
 
 ## Deployment
 
-The service is containerized with Docker and deployed to Google Cloud Run.  
-MongoDB is hosted on MongoDB Atlas.
+MongoDB is hosted on MongoDB Atlas.  
+The service can be containerized and deployed to Google Cloud Run.
 
 ---
 

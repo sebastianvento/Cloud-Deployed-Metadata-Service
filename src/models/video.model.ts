@@ -1,41 +1,31 @@
 import mongoose, { Schema, Document } from "mongoose";
-
- export interface PaginatedVideos {
-  data: IVideo[];
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
-
-export interface VideoQueryOptions {
-  page: number;
-  limit: number;
-  sortBy: string;
-  order: "asc" | "desc";
-}
-
+ 
 // TypeScript interface representing a Video document
 export interface IVideo extends Document {
-  title: string;
-  genre: string;
-  tags: string[];
-  duration: number; // in minutes
-  rating: number;   // 0–10
-  createdAt: Date;
-  sourceUpdatedAt: Date;
+    title: string;
+    description: string;
+    releaseYear: number;
+    durationMinutes: number;
+    genres: string[];
+    createdAt: Date;
+    migratedAt: Date;
+    sourceUpdatedAt?: Date;
 }
 
-// Mongoose schema defining structure and validation rules
+// Canonical Mongo document model for migrated video metadata.
 const VideoSchema: Schema = new Schema<IVideo>({
-  title: { type: String, required: true },
-  genre: { type: String, required: true },
-  tags: { type: [String], default: [] },
-  duration: { type: Number, required: true },
-  rating: { type: Number, required: true },
-  createdAt: { type: Date, default: Date.now },
-  sourceUpdatedAt: { type: Date, required: true }
+    title: { type: String, required: true },
+    genres: { type: [String], required: true },
+    durationMinutes: { type: Number, required: true },
+    description: { type: String, required: true},
+    releaseYear: { type: Number, required: true},
+    createdAt: { type: Date, required: true},
+    sourceUpdatedAt: { type: Date, required: false },
+    migratedAt: { type: Date, required: true }
 });
+
+// Index based on unique components from legacy db.
+VideoSchema.index({ title: 1, releaseYear: 1 }, { unique: true });
 
 // Model binding schema to the "Video" collection
 export const Video = mongoose.model<IVideo>("Video", VideoSchema);

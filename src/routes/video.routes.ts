@@ -8,13 +8,13 @@ const controller = new VideoController();
 
 // Create a new video resource
 router.post("/", (req, res, next) =>
-  controller.create(req, res, next)
+    controller.create(req, res, next)
 );
 
 // Retrieve video resources
 // Controller returned promise is ignored
 router.get("/", (req, res, next) =>
-  controller.findAll(req, res, next)
+    controller.findAll(req, res, next)
 );
 
 // Retrieve video by id

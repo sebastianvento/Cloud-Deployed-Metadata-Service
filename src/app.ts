@@ -9,7 +9,7 @@ app.use(express.json());
 
 // Health check endpoint for monitoring and container orchestration
 app.get("/health", (_req, res) => {
-  res.status(200).json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
 });
 
 // Register video-related routes
