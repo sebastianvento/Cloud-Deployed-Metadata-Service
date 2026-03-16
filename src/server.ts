@@ -27,7 +27,7 @@ async function startServer() {
         });
    
     } catch (error) {
-        // Fail fast on startup errors
+        // Fail on startup errors
         console.error("Failed to start server:", error);
         process.exit(1);
      }
