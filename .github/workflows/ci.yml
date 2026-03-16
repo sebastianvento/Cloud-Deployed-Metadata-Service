@@ -47,6 +47,13 @@ jobs:
 
       - name: Run migration
         run: npm run migrate
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          PGUSER: viihde
+          PGPASSWORD: viihdepass
+          PGHOST: localhost
+          PGPORT: 5432
+          PGDATABASE: legacy_metadata
 
       # Start API for integration tests
       - name: Start API server
