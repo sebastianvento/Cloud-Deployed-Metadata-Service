@@ -37,7 +37,6 @@ jobs:
 
       - name: Start databases
         run: |
-          docker run -d -p 27017:27017 --name mongo mongo:7
           docker compose up -d postgres
           sleep 15
 
