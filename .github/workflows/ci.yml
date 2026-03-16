@@ -41,6 +41,10 @@ jobs:
           docker compose up -d postgres
           sleep 15
 
+      - name: Initialize legacy database
+        run: |
+          docker exec -i viihde-postgres psql -U viihde -d legacy_metadata < src/database/schema.sql
+
       # Start API for integration tests
       - name: Start API server
         run: |
