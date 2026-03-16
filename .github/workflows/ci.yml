@@ -64,8 +64,8 @@ jobs:
 
       - name: Run Robot tests
         run: robot robot/tests/
-         env:
-           PGHOST: localhost
+        env:
+          PGHOST: localhost
 
       - name: Build Docker image
         run: docker build -t europe-north1-docker.pkg.dev/viihde-sprint/cloud-run-source-deploy/cloud-deployed-metadata-service:${{ github.sha }} .
