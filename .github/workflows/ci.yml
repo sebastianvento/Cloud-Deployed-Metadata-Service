@@ -38,9 +38,9 @@ jobs:
       # Start API for integration tests
       - name: Start API server
         run: |
-        node dist/server.js > server.log 2>&1 &
-        sleep 15
-        cat server.log
+          node dist/server.js > server.log 2>&1 &
+          sleep 15
+          cat server.log
 
       # Run Robot tests
       - name: Run Robot tests
