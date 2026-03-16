@@ -27,7 +27,7 @@ jobs:
         run: npm install
 
       - name: Install Robot Framework
-        run: pip install robotframework robotframework-requests pymongo psycopg[binary]
+        run: pip install robotframework robotframework-requests pymongo psycopg[binary] python-dotenv
 
       - name: Build
         run: npm run build
