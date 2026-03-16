@@ -75,6 +75,7 @@ jobs:
       - name: Run Robot tests
         run: robot robot/tests/
         env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
           PGUSER: viihde
           PGPASSWORD: viihdepass
           PGHOST: localhost
