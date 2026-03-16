@@ -39,6 +39,10 @@ jobs:
         run: |
           sudo service postgresql start
 
+      - name: Create PostgreSQL role
+        run: |
+          sudo -u postgres createuser runner -s
+
       # Start API for integration tests
       - name: Start API server
         run: |
