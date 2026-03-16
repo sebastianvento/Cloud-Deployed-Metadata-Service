@@ -45,6 +45,8 @@ jobs:
           node dist/server.js > server.log 2>&1 &
           sleep 15
           cat server.log
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
 
       # Run Robot tests
       - name: Run Robot tests
