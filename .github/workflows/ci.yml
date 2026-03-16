@@ -49,6 +49,9 @@ jobs:
       # Run Robot tests
       - name: Run Robot tests
         run: robot robot/tests/
+      - name: Show server log
+        if: always()
+        run: cat server.log
 
       - name: Build Docker image
         run: docker build -t europe-north1-docker.pkg.dev/viihde-sprint/cloud-run-source-deploy/cloud-deployed-metadata-service:${{ github.sha }} .
