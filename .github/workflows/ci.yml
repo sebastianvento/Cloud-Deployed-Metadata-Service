@@ -54,6 +54,9 @@ jobs:
           PGPORT: 5432
           PGDATABASE: legacy_metadata
 
+     - name: Show server log before tests
+       run: cat server.log
+
       # Run Robot tests
       - name: Run Robot tests
         run: robot robot/tests/
