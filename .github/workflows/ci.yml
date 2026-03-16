@@ -35,13 +35,8 @@ jobs:
       - name: Check build output
         run: ls dist
 
-      - name: Start PostgreSQL
-        run: |
-          sudo service postgresql start
-
-      - name: Create PostgreSQL role
-        run: |
-          sudo -u postgres createuser runner -s
+      - name: Start PostgreSQL (Docker)
+        run: docker compose up -d postgres
 
       # Start API for integration tests
       - name: Start API server
@@ -51,6 +46,11 @@ jobs:
           cat server.log
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
+          PGUSER: viihde
+          PGPASSWORD: viihdepass
+          PGHOST: localhost
+          PGPORT: 5432
+          PGDATABASE: legacy_metadata
 
       # Run Robot tests
       - name: Run Robot tests
