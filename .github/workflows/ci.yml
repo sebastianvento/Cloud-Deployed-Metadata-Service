@@ -65,7 +65,11 @@ jobs:
       - name: Run Robot tests
         run: robot robot/tests/
         env:
+          PGUSER: viihde
+          PGPASSWORD: viihdepass
           PGHOST: localhost
+          PGPORT: 5432
+          PGDATABASE: legacy_metadata
 
       - name: Build Docker image
         run: docker build -t europe-north1-docker.pkg.dev/viihde-sprint/cloud-run-source-deploy/cloud-deployed-metadata-service:${{ github.sha }} .
