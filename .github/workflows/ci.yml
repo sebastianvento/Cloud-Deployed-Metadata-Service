@@ -32,11 +32,15 @@ jobs:
       - name: Build
         run: npm run build
 
+     - name: Check build output
+       run: ls dist
+
       # Start API for integration tests
       - name: Start API server
         run: |
-          node dist/server.js &
-          sleep 5
+        node dist/server.js > server.log 2>&1 &
+        sleep 15
+        cat server.log
 
       # Run Robot tests
       - name: Run Robot tests
