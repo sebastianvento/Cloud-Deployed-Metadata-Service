@@ -45,6 +45,9 @@ jobs:
         run: |
           docker exec -i viihde-postgres psql -U viihde -d legacy_metadata < src/db/schema.sql
 
+      - name: Run migration
+        run: npm run migrate
+
       # Start API for integration tests
       - name: Start API server
         run: |
