@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { VideoService } from "../services/video.service";
+import { Types } from "mongoose";
 
 // Initialize the business logic service
 const videoService = new VideoService();
@@ -8,6 +9,20 @@ export class VideoController {
     // Handles the creation of a new video resource
     async create(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            const duration = Number(req.body.durationMinutes);
+            const year = Number(req.body.releaseYear);
+             if (!Array.isArray(req.body.genres) || !Number.isFinite(duration) ||
+                 !Number.isFinite(year)
+            ) {
+                res.status(400).json({ message: "Invalid parameter type"});
+                return;
+            }
+            if (req.body.genres.length == 0 || req.body.durationMinutes <= 0 || 
+                req.body.releaseYear <= 0
+            ) {
+                res.status(400).json({ message: "Invalid parameter" });
+                return;
+            }
             const video = await videoService.create(req.body);
             res.status(201).json(video);
         } catch (error) {
@@ -68,8 +83,16 @@ export class VideoController {
                 res.status(400).json({ message: "Invalid id parameter" });
             return;
             }
+            if (id.length === 0) {
+                res.status(400).json({ message: "Missing id parameter" });
+            return;
+            }
+            if (!Types.ObjectId.isValid(id)) {
+                res.status(400).json({ message: "Invalid id parameter" });
+            return;
+            }
 
-             const video = await videoService.findOne(id);
+            const video = await videoService.findOne(id);
 
             if (video === null) {
                 res.status(404).json({ message: "Video not found" });

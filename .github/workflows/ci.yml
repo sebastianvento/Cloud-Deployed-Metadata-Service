@@ -8,19 +8,39 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Install dependencies
+      - name: Setup Python (for Robot Framework)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Node dependencies
         run: npm install
+
+      - name: Install Robot Framework
+        run: pip install robotframework robotframework-requests
 
       - name: Build
         run: npm run build
+
+      # Start API for integration tests
+      - name: Start API server
+        run: |
+          node dist/server.js &
+          sleep 5
+
+      # Run Robot tests
+      - name: Run Robot tests
+        run: robot tests/
 
       - name: Build Docker image
         run: docker build -t europe-north1-docker.pkg.dev/viihde-sprint/cloud-run-source-deploy/cloud-deployed-metadata-service:${{ github.sha }} .

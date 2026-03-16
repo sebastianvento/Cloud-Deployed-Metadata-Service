@@ -88,6 +88,7 @@ migrateLegacyVideos.ts
 - Mongoose
 - Docker
 - GitHub Actions (CI)
+- Robot Framework (integration testing)
 
 ---
 
@@ -167,6 +168,39 @@ PGPASSWORD=...
 PGHOST=...
 PGPORT=5432
 PGDATABASE=...
+
+---
+
+## Testing
+
+Integration tests are implemented using **Robot Framework**.
+
+The tests validate the behavior of the metadata service, including:
+
+- API health endpoint
+- Video creation and retrieval
+- Pagination and sorting behavior
+- Input validation and error handling
+- Data migration correctness
+- Genre normalization during ETL
+
+Tests interact with the running API and verify both HTTP responses and database state.
+
+### Running tests locally
+
+Install Robot Framework:
+
+pip install robotframework robotframework-requests
+
+Run the test suite:
+
+robot tests/
+
+Robot Framework generates the following reports:
+
+- log.html
+- report.html
+- output.xml
 
 ---
 

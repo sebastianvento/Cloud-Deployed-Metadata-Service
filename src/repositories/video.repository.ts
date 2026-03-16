@@ -19,10 +19,12 @@ export class VideoRepository {
 
         const total = await Video.countDocuments();
 
+        const direction = order === "asc" ? 1 : -1;
+
         const data = await Video.find()
-            .skip(skipped)
-            .limit(limit)
-            .sort({ [sortBy]: order });
+        .sort({ [sortBy]: direction })
+        .skip(skipped)
+        .limit(limit);
  
         const dataset: PaginatedVideos = {
             data,

@@ -1,4 +1,3 @@
-
 // Transforms relational legacy rows into canonical Mongo document shape.
 // Handles grouping, normalization, deduplication and migration metadata.
 export function transformLegacyRows(rows: any[]) {

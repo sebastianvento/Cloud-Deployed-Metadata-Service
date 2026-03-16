@@ -10,5 +10,14 @@ dist/
 # Logs
 *.log
 
+# Robot Framework results
+output.xml
+log.html
+report.html
+
+# Python cache
+__pycache__/
+*.pyc
+
 # OS files
 .DS_Store
