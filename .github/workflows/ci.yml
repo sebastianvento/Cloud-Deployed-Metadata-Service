@@ -32,14 +32,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Check build output
-        run: ls dist
-
       - name: Start databases
         run: |
-          docker run -d -p 27017:27017 --name mongo mongo:7
           docker compose up -d postgres
-          sleep 15
+          sleep 5
 
       - name: Initialize legacy database
         run: |
@@ -59,7 +55,7 @@ jobs:
       - name: Start API server
         run: |
           node dist/server.js > server.log 2>&1 &
-          sleep 15
+          sleep 5
           cat server.log
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
@@ -68,9 +64,6 @@ jobs:
           PGHOST: localhost
           PGPORT: 5432
           PGDATABASE: legacy_metadata
-
-      - name: Show server log before tests
-        run: cat server.log
 
       - name: Run Robot tests
         run: robot robot/tests/
