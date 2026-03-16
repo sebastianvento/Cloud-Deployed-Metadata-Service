@@ -36,7 +36,9 @@ jobs:
         run: ls dist
 
       - name: Start PostgreSQL (Docker)
-        run: docker compose up -d postgres
+        run: |
+          docker compose up -d postgres
+          sleep 10
 
       # Start API for integration tests
       - name: Start API server
