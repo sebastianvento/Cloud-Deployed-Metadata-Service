@@ -37,7 +37,7 @@ export class VideoController {
             let limit = 10;
             let sortBy = "createdAt";
             let order: "asc" | "desc" = "desc";
-            let filters = {};
+            let filters = any;
 
             if (typeof req.query.page === "string") {
                 const parsed = Number(req.query.page);

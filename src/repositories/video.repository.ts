@@ -16,12 +16,12 @@ export class VideoRepository {
         const order = parameters.order ?? "desc";
         const filters = { ...parameters.filters };
 
-        if (Object.hasOwn(filters, "genres")) {
+        if (Object.prototype.hasOwnProperty.call(filters, "genres")) {
             filters.genres = { $in: [filters.genres] };
         }
 
-        if (Object.hasOwn(filters, "durationMin")) {
-            if (Object.hasOwn(filters, "durationMax")) {
+        if (Object.prototype.hasOwnProperty.call(filters, "durationMin")) {
+            if (Object.prototype.hasOwnProperty.call(filters, "durationMax")) {
                 filters.durationMinutes = { $lte: filters.durationMax, $gte: filters.durationMin };
                 delete filters.durationMin;
                 delete filters.durationMax;
@@ -31,12 +31,12 @@ export class VideoRepository {
                 delete filters.durationMin;
             }
         }
-        else if (Object.hasOwn(filters, "durationMax")) {
+        else if (Object.prototype.hasOwnProperty.call(filters, "durationMax")) {
             filters.durationMinutes = { $lte: filters.durationMax };
             delete filters.durationMax;
         }
 
-        if (Object.hasOwn(filters, "titleSearch")) {
+        if (Object.prototype.hasOwnProperty.call(filters, "titleSearch")) {
             filters.title = { $regex: filters.titleSearch, $options: "i" };
             delete filters.titleSearch;
         }
