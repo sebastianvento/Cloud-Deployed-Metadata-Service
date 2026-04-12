@@ -16,7 +16,7 @@ export interface VideoQueryOptions {
     limit: number;
     sortBy: string;
     order: "asc" | "desc";
-    filters: any;
+    filters: Record<string, any>;
 }
 
 export class VideoService {
