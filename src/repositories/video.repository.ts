@@ -14,6 +14,32 @@ export class VideoRepository {
         const limit = parameters.limit ?? 10;
         const sortBy = parameters.sortBy ?? "createdAt";
         const order = parameters.order ?? "desc";
+        const filters = { ...parameters.filters };
+
+        if (Object.hasOwn(filters, "genres")) {
+            filters.genres = { $in: [filters.genres] };
+        }
+
+        if (Object.hasOwn(filters, "durationMin")) {
+            if (Object.hasOwn(filters, "durationMax")) {
+                filters.durationMinutes = { $lte: filters.durationMax, $gte: filters.durationMin };
+                delete filters.durationMin;
+                delete filters.durationMax;
+            }
+            else {
+                filters.durationMinutes = { $gte: filters.durationMin };
+                delete filters.durationMin;
+            }
+        }
+        else if (Object.hasOwn(filters, "durationMax")) {
+            filters.durationMinutes = { $lte: filters.durationMax };
+            delete filters.durationMax;
+        }
+
+        if (Object.hasOwn(filters, "titleSearch")) {
+            filters.title = { $regex: filters.titleSearch, $options: "i" };
+            delete filters.titleSearch;
+        }
 
         const skipped = (page - 1) * limit;
 
@@ -21,7 +47,7 @@ export class VideoRepository {
 
         const direction = order === "asc" ? 1 : -1;
 
-        const data = await Video.find()
+        const data = await Video.find(filters)
         .sort({ [sortBy]: direction })
         .skip(skipped)
         .limit(limit);

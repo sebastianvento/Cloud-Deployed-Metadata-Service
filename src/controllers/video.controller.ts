@@ -37,6 +37,7 @@ export class VideoController {
             let limit = 10;
             let sortBy = "createdAt";
             let order: "asc" | "desc" = "desc";
+            let filters = {};
 
             if (typeof req.query.page === "string") {
                 const parsed = Number(req.query.page);
@@ -60,11 +61,41 @@ export class VideoController {
                 order = req.query.order;
             }
 
+            if (typeof req.query.genres === "string") {
+                filters.genres = req.query.genres;
+            }
+
+            if (typeof req.query.durationMin === "string") {
+                const parsed = Number(req.query.durationMin);
+                if (!Number.isNaN(parsed) && parsed > 0) {
+                    filters.durationMin = parsed;
+                }
+            }
+
+            if (typeof req.query.durationMax === "string") {
+                const parsed = Number(req.query.durationMax);
+                if (!Number.isNaN(parsed) && parsed > 0) {
+                    filters.durationMax = parsed;
+                }
+            }
+
+            if (typeof req.query.releaseYear === "string") {
+                const parsed = Number(req.query.releaseYear);
+                if (!Number.isNaN(parsed) && parsed > 0) {
+                    filters.releaseYear = parsed;
+                }
+            }
+
+            if (typeof req.query.titleSearch === "string") {
+                filters.titleSearch = req.query.titleSearch;
+            }
+
             const videos = await videoService.findAll({
                 page,
                 limit,
                 sortBy,
-                order
+                order,
+                filters
             });
 
             res.status(200).json(videos);
