@@ -43,7 +43,7 @@ export class VideoRepository {
 
         const skipped = (page - 1) * limit;
 
-        const total = await Video.countDocuments();
+        const total = await Video.countDocuments(filters);
 
         const direction = order === "asc" ? 1 : -1;
 
@@ -66,5 +66,20 @@ export class VideoRepository {
     // Retrieves video by id
     async findOne(id: string): Promise<IVideo | null> {
         return Video.findById(id);
+    }
+    // Retrieve video amount per genre
+    async genres(): Promise<any[]> {
+        const data = await Video.aggregate([
+            { $unwind: "$genres" },
+            {
+                $group: {
+                _id: "$genres",
+                count: { $sum: 1 }
+                }
+            },
+            { $sort: { count: -1 } }
+        ]);
+
+        return data;
     }
 }

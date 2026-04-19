@@ -17,6 +17,11 @@ router.get("/", (req, res, next) =>
     controller.findAll(req, res, next)
 );
 
+// Retrieve videos per genre
+router.get("/stats/genres", (req, res, next) =>
+    controller.genres(req, res, next)
+);
+
 // Retrieve video by id
 router.get("/:id", (req, res, next) =>
     controller.findOne(req, res, next)

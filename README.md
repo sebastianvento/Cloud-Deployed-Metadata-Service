@@ -183,6 +183,8 @@ The tests validate the behavior of the metadata service, including:
 - Input validation and error handling
 - Data migration correctness
 - Genre normalization during ETL
+- Genre calculation correctness
+- Video filtering
 
 Tests interact with the running API and verify both HTTP responses and database state.
 

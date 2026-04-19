@@ -25,21 +25,26 @@ export class VideoService {
     private readonly videoRepository: VideoRepository;
 
     constructor() {
-      this.videoRepository = new VideoRepository();
+        this.videoRepository = new VideoRepository();
     }
 
     // Coordinates creation of a new video entity
     async create(data: Partial<IVideo>): Promise<IVideo> {
-      return this.videoRepository.create(data);
+        return this.videoRepository.create(data);
     }
 
     // Retrieves video entities
     async findAll(parameters: Partial<VideoQueryOptions>): Promise<PaginatedVideos> {
-      return this.videoRepository.findAll(parameters);
+        return this.videoRepository.findAll(parameters);
     }
 
     // Retrieves video by id
-    async findOne (id: string): Promise<IVideo|null> {
-      return this.videoRepository.findOne(id);
+    async findOne (id: string): Promise<IVideo | null> {
+        return this.videoRepository.findOne(id);
+    }
+
+    // Retrieves video amount per genre
+    async genres (): Promise<any[]> {
+        return this.videoRepository.genres();
     }
 }

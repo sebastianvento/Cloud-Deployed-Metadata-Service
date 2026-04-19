@@ -136,4 +136,16 @@ export class VideoController {
             next(error);
         }
     }
+
+    // Retrieve counts of genres
+    async genres(req: Request, res: Response, next: NextFunction): Promise<any[]> {
+        try {
+            const counts = await videoService.genres();
+
+            res.status(200).json({ data: counts });
+
+        } catch (error) {
+            next(error);
+        }
+    }
 }
