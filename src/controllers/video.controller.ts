@@ -138,7 +138,7 @@ export class VideoController {
     }
 
     // Retrieve counts of genres
-    async genres(req: Request, res: Response, next: NextFunction): Promise<any[]> {
+    async genres(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const counts = await videoService.genres();
 
