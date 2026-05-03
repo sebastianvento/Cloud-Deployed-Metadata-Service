@@ -1,16 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 
-// Rate limiter disabled for now
-
 export function rateLimiter(
     req: Request,
     res: Response,
     next: NextFunction
 ) {
-    if (rateMap.has(req.ip!)) {
-        let current = rateMap.get(req.ip!)!;
+    const ip = (req.headers["x-forwarded-for"] as string) || req.ip!;
+    if (rateMap.has(ip!)) {
+        let current = rateMap.get(ip!)!;
         let currentTime = Date.now();
-        let calc = 5;
+        let calc = 60;
         let diffInMillis = 60000;
 
         for (let index = current.length - 1; index >= 0; index--) {
@@ -34,7 +33,7 @@ export function rateLimiter(
     }
     else {
         let current = [Date.now()];
-        rateMap.set(req.ip!, current);
+        rateMap.set(ip!, current);
         next();
     }
 }

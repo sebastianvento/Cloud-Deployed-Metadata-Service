@@ -14,6 +14,8 @@ Check That Ordering Is Right
 
     Create API Session
 
+    ${h1}=    Create Dictionary    X-Forwarded-For=9.9.9.9
+
     # Request videos sorted by title in descending order
     ${params}=    Create Dictionary
     ...    page=1
@@ -21,7 +23,7 @@ Check That Ordering Is Right
     ...    order=desc
     ...    sortBy=title
 
-    ${response}=    GET On Session    api    /videos    params=${params}
+    ${response}=    GET On Session    api    /videos    params=${params}    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}
 
     # Extract titles into a list to independently verify sorting

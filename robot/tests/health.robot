@@ -12,7 +12,9 @@ Call Health Endpoint
 
     Create API Session
 
-    ${response}=    GET On Session    api    /health
+    ${h1}=    Create Dictionary    X-Forwarded-For=2.2.2.2
+
+    ${response}=    GET On Session    api    /health    headers=${h1}
 
     RETURN    ${response}
 

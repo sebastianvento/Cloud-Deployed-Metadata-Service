@@ -31,7 +31,9 @@ Check That Genre Transformation Works
 
     Create API Session
 
-    ${response}=    GET On Session    api    /videos
+    ${h1}=    Create Dictionary    X-Forwarded-For=4.4.4.4
+
+    ${response}=    GET On Session    api    /videos    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}
 
     # Iterate through all returned videos and verify genre normalization rules

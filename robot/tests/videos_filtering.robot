@@ -12,11 +12,13 @@ Fetch With Filter
 
     Create API Session
 
+    ${h1}=    Create Dictionary    X-Forwarded-For=7.7.7.7
+
     # Initializing filter
     ${genre}    Set Variable    action
 
     ${params}=    Create Dictionary    genres=${genre}
-    ${response}=    GET On Session    api    /videos    params=${params}
+    ${response}=    GET On Session    api    /videos    params=${params}    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}
 
     FOR    ${video}    IN    @{video_data}[data]
@@ -30,12 +32,14 @@ Fetch With Multiple Filters
 
     Create API Session
 
+    ${h1}=    Create Dictionary    X-Forwarded-For=7.7.7.7
+
     # Initializing filter
     ${genre}    Set Variable    action
     ${durationMin}    Set Variable    120
 
     ${params}=    Create Dictionary    genres=${genre}    durationMin=${durationMin}
-    ${response}=    GET On Session    api    /videos    params=${params}
+    ${response}=    GET On Session    api    /videos    params=${params}    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}
 
     FOR    ${video}    IN    @{video_data}[data]
@@ -50,11 +54,13 @@ Fetch With Invalid Filter
 
     Create API Session
 
+    ${h1}=    Create Dictionary    X-Forwarded-For=7.7.7.7
+
     # Initializing filter
     ${invalidGenre}    Set Variable    invalidgenre
 
     ${params}=    Create Dictionary    genres=${invalidGenre}
-    ${response}=    GET On Session    api    /videos    params=${params}
+    ${response}=    GET On Session    api    /videos    params=${params}    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}
 
     Should Be Empty    ${video_data}[data]

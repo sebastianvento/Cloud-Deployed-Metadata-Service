@@ -14,12 +14,14 @@ Fetch With Invalid Id
 
     Create API Session
 
+    ${h1}=    Create Dictionary    X-Forwarded-For=6.6.6.6
+
     # Invalid identifier that does not match MongoDB ObjectId format
     ${video_id}    Set Variable    test
 
     Run Keyword And Expect Error
     ...    STARTS: HTTPError: 400 Client Error:
-    ...    GET On Session    api    /videos/${video_id}
+    ...    GET On Session    api    /videos/${video_id}    headers=${h1}
 
 
 Fetch With Valid Id But Resource Does Not Exists
@@ -30,9 +32,11 @@ Fetch With Valid Id But Resource Does Not Exists
 
     Create API Session
 
+    ${h1}=    Create Dictionary    X-Forwarded-For=6.6.6.6
+
     # Valid MongoDB ObjectId format but not present in the database
     ${video_id}    Set Variable    507f1f77bcf86cd799439011
 
     Run Keyword And Expect Error
     ...    STARTS: HTTPError: 404 Client Error:
-    ...    GET On Session    api    /videos/${video_id}
+    ...    GET On Session    api    /videos/${video_id}    headers=${h1}

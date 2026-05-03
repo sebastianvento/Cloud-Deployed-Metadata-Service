@@ -14,6 +14,8 @@ Create Video With Missing Fields
 
     Create API Session
 
+    ${h1}=    Create Dictionary    X-Forwarded-For=10.10.10.10
+
     ${genres}=    Create List    test
 
     ${title}=    Set Variable    ${EMPTY}
@@ -29,7 +31,7 @@ Create Video With Missing Fields
 
     Run Keyword And Expect Error
     ...    STARTS: HTTPError: 500 Server Error:
-    ...    POST On Session    api    /videos    json=${payload}
+    ...    POST On Session    api    /videos    json=${payload}    headers=${h1}
 
     # Verify that no video was created in the database
     ${exists}=    Video Exists    ${title}
@@ -42,6 +44,8 @@ Create Video With Invalid Fields
     [Tags]    api    validation
 
     Create API Session
+
+    ${h1}=    Create Dictionary    X-Forwarded-For=10.10.10.10
 
     ${timestamp}=    Get Time    epoch
 
@@ -60,7 +64,7 @@ Create Video With Invalid Fields
 
     Run Keyword And Expect Error
     ...    STARTS: HTTPError: 400 Client Error:
-    ...    POST On Session    api    /videos    json=${payload}
+    ...    POST On Session    api    /videos    json=${payload}    headers=${h1}
 
     # Ensure resource was not created
     ${exists}=    Video Exists    ${title}
@@ -74,6 +78,8 @@ Create Video With Invalid Types
     [Tags]    api    validation
 
     Create API Session
+
+    ${h1}=    Create Dictionary    X-Forwarded-For=10.10.10.10
 
     ${timestamp}=    Get Time    epoch
 
@@ -94,7 +100,7 @@ Create Video With Invalid Types
 
     Run Keyword And Expect Error
     ...    STARTS: HTTPError: 400 Client Error:
-    ...    POST On Session    api    /videos    json=${payload}
+    ...    POST On Session    api    /videos    json=${payload}    headers=${h1}
 
     # Confirm that the invalid request did not create a resource
     ${exists}=    Video Exists    ${title}

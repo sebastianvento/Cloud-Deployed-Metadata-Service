@@ -17,9 +17,11 @@ Check That Pagination Is Consistent
 
     Create API Session
 
+    ${h1}=    Create Dictionary    X-Forwarded-For=8.8.8.8
+
     # Request page 2 with limit 3 using deterministic sorting
     ${params}=    Create Dictionary    page=2    limit=3    sortBy=title    order=asc
-    ${response}=    GET On Session    api    /videos    params=${params}
+    ${response}=    GET On Session    api    /videos    params=${params}    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}
 
     ${page_number: int}=    Set Variable    2
@@ -31,7 +33,7 @@ Check That Pagination Is Consistent
 
     # Fetch the entire dataset with identical sorting to compare offsets
     ${compare_params}=    Create Dictionary    sortBy=title    order=asc
-    ${compare_response}=    GET On Session    api    /videos    params=${compare_params}
+    ${compare_response}=    GET On Session    api    /videos    params=${compare_params}    headers=${h1}
     ${compare_video_data}=    Set Variable    ${compare_response.json()}
 
     # Verify page offset matches the correct slice of the sorted dataset
@@ -46,7 +48,7 @@ Check That Pagination Is Consistent
 
     # Request a page far beyond dataset bounds
     ${pages_out_range}=    Create Dictionary    page=10000    limit=1
-    ${out_range_response}=    GET On Session    api    /videos    params=${pages_out_range}
+    ${out_range_response}=    GET On Session    api    /videos    params=${pages_out_range}    headers=${h1}
     ${out_range_data}=    Set Variable    ${out_range_response.json()}
 
     ${out_range_number: int}=    Set Variable    10000
@@ -55,7 +57,7 @@ Check That Pagination Is Consistent
 
     # Validate correct slicing at page boundary
     ${params_page_boundary}=    Create Dictionary    page=3    limit=3    sortBy=title    order=asc
-    ${boundary_response}=    GET On Session    api    /videos    params=${params_page_boundary}
+    ${boundary_response}=    GET On Session    api    /videos    params=${params_page_boundary}    headers=${h1}
     ${boundary_data}=    Set Variable    ${boundary_response.json()}
 
     Should Be Equal    ${boundary_data}[data][0][title]      ${compare_video_data}[data][6][title]
@@ -71,6 +73,8 @@ Fetch Videos With Invalid Metainformation
 
     Create API Session
 
+    ${h1}=    Create Dictionary    X-Forwarded-For=8.8.8.8
+
     # Invalid query parameters that should trigger fallback behavior
     ${invalidParams}=    Create Dictionary
     ...    page=-1
@@ -78,7 +82,7 @@ Fetch Videos With Invalid Metainformation
     ...    order=notcorrect
     ...    sortBy=100
 
-    ${response}=    GET On Session    api    /videos    params=${invalidParams}
+    ${response}=    GET On Session    api    /videos    params=${invalidParams}    headers=${h1}
     Status Should Be    200    ${response}
 
     ${video_data}=    Set Variable    ${response.json()}

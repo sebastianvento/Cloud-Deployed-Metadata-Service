@@ -75,7 +75,6 @@ src/etl/
 transformLegacyVideos.ts
 migrateLegacyVideos.ts
 
-
 ---
 
 ## Tech Stack
@@ -185,6 +184,7 @@ The tests validate the behavior of the metadata service, including:
 - Genre normalization during ETL
 - Genre calculation correctness
 - Video filtering
+- Rate limiting
 
 Tests interact with the running API and verify both HTTP responses and database state.
 

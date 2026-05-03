@@ -8,20 +8,17 @@ Resource          ../resources/api_keywords.robot
 Test Rate Limiter
     [Documentation]    Ensures that the API limits requests accordingly
 
-    [Tags]    disabled    api    limiter    limiting
-    Skip    Rate limiter disabled for now
+    [Tags]    api    limiter    limiting
 
     Create API Session
 
-    ${response1}=    GET On Session    api    /videos
-    ${response2}=    GET On Session    api    /videos
-    ${response3}=    GET On Session    api    /videos
-    ${response4}=    GET On Session    api    /videos 
-    ${response5}=    GET On Session    api    /videos
-    Run Keyword And Expect Error    *429*    GET On Session    api    /videos
+    ${h1}=    Create Dictionary    X-Forwarded-For=3.3.3.3
     
-    Status Should Be    200    ${response1}
-    Status Should Be    200    ${response2}
-    Status Should Be    200    ${response3}
-    Status Should Be    200    ${response4}
-    Status Should Be    200    ${response5}
+    VAR    ${rc}    0
+    WHILE    ${rc} < 60
+        ${response}=    GET On Session    api    /videos    headers=${h1}
+        Status Should Be    200    ${response}
+        ${rc}=    Evaluate    ${rc} + 1
+    END
+
+    Run Keyword And Expect Error    *HTTPError*429*    GET On Session    api    /videos    headers=${h1}

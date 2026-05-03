@@ -15,6 +15,8 @@ Create Video And Fetch It
 
     Create API Session
 
+    ${h1}=    Create Dictionary    X-Forwarded-For=5.5.5.5
+
     # Generate a unique timestamp to ensure test data uniqueness
     ${timestamp}=    Get Time    epoch
 
@@ -33,7 +35,7 @@ Create Video And Fetch It
     ...    migratedAt=2025-01-01T00:00:00Z
 
     # Create video via POST /videos
-    ${response}=    POST On Session    api    /videos    json=${payload}
+    ${response}=    POST On Session    api    /videos    json=${payload}    headers=${h1}
     Status Should Be    201    ${response}
 
     # Extract created video identifier from response
@@ -43,7 +45,7 @@ Create Video And Fetch It
     Log    Created video id: ${video_id}
 
     # Retrieve created video via GET /videos/{id}
-    ${get_response}=    GET On Session    api    /videos/${video_id}
+    ${get_response}=    GET On Session    api    /videos/${video_id}    headers=${h1}
     Status Should Be    200    ${get_response}
 
     ${video}=    Set Variable    ${get_response.json()}

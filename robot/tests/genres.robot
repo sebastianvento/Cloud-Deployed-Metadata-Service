@@ -12,14 +12,16 @@ Fetch Genre Counts
     [Tags]    api    genres
 
     Create API Session
+
+    ${h1}=    Create Dictionary    X-Forwarded-For=1.1.1.1
     
     # Request genres and their video amounts
-    ${responseGenres}=    GET On Session    api    /videos/stats/genres
+    ${responseGenres}=    GET On Session    api    /videos/stats/genres    headers=${h1}
     ${genre_data}=    Set Variable    ${responseGenres.json()}
 
     ${genre}    Set Variable    drama
     ${params}=    Create Dictionary    genres=${genre}
-    ${response}=    GET On Session    api    /videos    params=${params}
+    ${response}=    GET On Session    api    /videos    params=${params}    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}
     ${length} =	Get Length	${video_data}[data]
 
