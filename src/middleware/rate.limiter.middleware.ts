@@ -6,9 +6,9 @@ export function rateLimiter(
     next: NextFunction
 ) {
     const raw = req.headers["x-forwarded-for"];
-    const ip = typeof raw === "string" ? raw : req.ip!;
+    const ip = Array.isArray(raw) ? raw[0] : (raw ?? req.ip!);
     if (rateMap.has(ip)) {
-        let current = rateMap.get(ip);
+        let current = rateMap.get(ip)!;
         let currentTime = Date.now();
         let calc = 60;
         let diffInMillis = 60000;
