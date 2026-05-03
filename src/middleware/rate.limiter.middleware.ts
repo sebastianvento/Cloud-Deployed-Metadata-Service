@@ -7,8 +7,8 @@ export function rateLimiter(
     res: Response,
     next: NextFunction
 ) {
-    if (rateMap.has(req.ip)) {
-        let current = rateMap.get(req.ip)!;
+    if (rateMap.has(req.ip!)) {
+        let current = rateMap.get(req.ip!)!;
         let currentTime = Date.now();
         let calc = 5;
         let diffInMillis = 60000;
@@ -34,7 +34,7 @@ export function rateLimiter(
     }
     else {
         let current = [Date.now()];
-        rateMap.set(req.ip, current);
+        rateMap.set(req.ip!, current);
         next();
     }
 }
