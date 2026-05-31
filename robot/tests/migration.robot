@@ -1,15 +1,15 @@
 *** Settings ***
 Documentation     Integration tests validating the SQL → MongoDB migration pipeline.
-...               These tests verify that legacy metadata is migrated correctly
+...               These tests validate that legacy metadata is migrated correctly
 ...               and that transformation rules are applied as expected.
 
 Resource          ../resources/api_keywords.robot
 
 
 *** Test Cases ***
-Run Migration And Verify Data
+Run Migration And Validate Data
     [Documentation]    Confirms that a known legacy video exists in the source database,
-    ...                runs the migration script, and verifies the record appears in
+    ...                runs the migration script, and validates the record appears in
     ...                the target MongoDB collection.
 
     [Tags]    api    migration
@@ -32,11 +32,10 @@ Check That Genre Transformation Works
     Create API Session
 
     ${h1}=    Create Dictionary    X-Forwarded-For=4.4.4.4
-
     ${response}=    GET On Session    api    /videos    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}
 
-    # Iterate through all returned videos and verify genre normalization rules
+    # Iterate through all returned videos and validated genre normalization rules
     FOR    ${video}    IN    @{video_data}[data]
         FOR    ${genre}    IN    @{video}[genres]
 

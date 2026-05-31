@@ -7,7 +7,7 @@ Resource          ../resources/api_keywords.robot
 
 *** Test Cases ***
 Create Video With Missing Fields
-    [Documentation]    Ensures that creating a video with missing required
+    [Documentation]    Validates that creating a video with missing required
     ...                fields results in a server error and no resource is stored.
 
     [Tags]    api    validation
@@ -15,9 +15,7 @@ Create Video With Missing Fields
     Create API Session
 
     ${h1}=    Create Dictionary    X-Forwarded-For=10.10.10.10
-
     ${genres}=    Create List    test
-
     ${title}=    Set Variable    ${EMPTY}
 
     # Payload missing required field "title"
@@ -33,24 +31,21 @@ Create Video With Missing Fields
     ...    STARTS: HTTPError: 500 Server Error:
     ...    POST On Session    api    /videos    json=${payload}    headers=${h1}
 
-    # Verify that no video was created in the database
+    # Validate that no video was created in the database
     ${exists}=    Video Exists    ${title}
     Should Not Be True    ${exists}
 
 
 Create Video With Invalid Fields
-    [Documentation]    Verifies that invalid field values are rejected by the API.
+    [Documentation]    Validates that invalid field values are rejected by the API.
 
     [Tags]    api    validation
 
     Create API Session
 
     ${h1}=    Create Dictionary    X-Forwarded-For=10.10.10.10
-
     ${timestamp}=    Get Time    epoch
-
     ${genres}=    Create List    test
-
     ${title}=    Set Variable    Robot Test Movie ${timestamp}
 
     # Invalid value for releaseYear
@@ -66,13 +61,13 @@ Create Video With Invalid Fields
     ...    STARTS: HTTPError: 400 Client Error:
     ...    POST On Session    api    /videos    json=${payload}    headers=${h1}
 
-    # Ensure resource was not created
+    # Validate resource was not created
     ${exists}=    Video Exists    ${title}
     Should Not Be True    ${exists}
 
 
 Create Video With Invalid Types
-    [Documentation]    Ensures that invalid data types in the request payload
+    [Documentation]    Validates that invalid data types in the request payload
     ...                cause the API to reject the request.
 
     [Tags]    api    validation
@@ -80,13 +75,9 @@ Create Video With Invalid Types
     Create API Session
 
     ${h1}=    Create Dictionary    X-Forwarded-For=10.10.10.10
-
     ${timestamp}=    Get Time    epoch
-
     ${genres}=    Create List    test
-
     ${title}=    Set Variable    Robot Test Movie ${timestamp}
-
     ${wrongtypeyear}=    Set Variable    test
 
     # releaseYear provided with an invalid type

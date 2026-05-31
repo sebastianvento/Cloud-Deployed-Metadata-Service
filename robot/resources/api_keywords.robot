@@ -34,4 +34,4 @@ Run Migration Script
     # Run Process <command> <arguments>
     #
     # npm run migrate  → Executes the migration defined in package.json
-    # cwd=..           → Ensures the command runs from the project root
+    # cwd=..           → Validates the command runs from the project root

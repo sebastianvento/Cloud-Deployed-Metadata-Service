@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     API integration tests for video resource creation and retrieval.
+Documentation     Integration tests for video resource creation and retrieval.
 ...               Validates that a new video can be created via the API and
 ...               subsequently retrieved from the metadata service.
 
@@ -8,7 +8,7 @@ Resource          ../resources/api_keywords.robot
 
 *** Test Cases ***
 Create Video And Fetch It
-    [Documentation]    Creates a new video through the API and verifies that the
+    [Documentation]    Creates a new video through the API and validates that the
     ...                resource can be retrieved with identical metadata.
 
     [Tags]    api    happy-path
@@ -17,11 +17,9 @@ Create Video And Fetch It
 
     ${h1}=    Create Dictionary    X-Forwarded-For=5.5.5.5
 
-    # Generate a unique timestamp to ensure test data uniqueness
+    # Generate a unique timestamp to validate test data uniqueness
     ${timestamp}=    Get Time    epoch
-
     ${genres}=    Create List    test
-
     ${title}=    Set Variable    Robot Test Movie ${timestamp}
 
     # Construct request payload for video creation
@@ -53,6 +51,6 @@ Create Video And Fetch It
     # Validate that stored metadata matches the created resource
     Should Be Equal    ${video}[title]    ${title}
 
-    # Confirm persistence through database verification keyword
+    # Confirm persistence through database validation keyword
     ${exists}=    Video Exists    ${title}
     Should Be True    ${exists}

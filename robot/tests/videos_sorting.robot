@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Integration tests verifying correct sorting behavior of the
+Documentation     Integration tests validating correct sorting behavior of the
 ...               video listing endpoint.
 
 Resource          ../resources/api_keywords.robot
@@ -26,7 +26,7 @@ Check That Ordering Is Right
     ${response}=    GET On Session    api    /videos    params=${params}    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}
 
-    # Extract titles into a list to independently verify sorting
+    # Extract titles into a list to independently validate sorting
     ${listToSort}    Create list
     ...    ${video_data}[data][0][title]
     ...    ${video_data}[data][1][title]

@@ -2,19 +2,19 @@ import { Request, Response, NextFunction } from "express";
 import { VideoService } from "../services/video.service";
 import { Types } from "mongoose";
 
-// Initialize the business logic service
+// Initialize the business logic service.
 const videoService = new VideoService();
 
 export class VideoController {
-    // Handles the creation of a new video resource
+    // Handles the creation of a new video resource.
     async create(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const duration = Number(req.body.durationMinutes);
             const year = Number(req.body.releaseYear);
-             if (!Array.isArray(req.body.genres) || !Number.isFinite(duration) ||
+            if (!Array.isArray(req.body.genres) || !Number.isFinite(duration) ||
                  !Number.isFinite(year)
             ) {
-                res.status(400).json({ message: "Invalid parameter type"});
+                res.status(400).json({ message: "Invalid parameter type" });
                 return;
             }
             if (req.body.genres.length == 0 || req.body.durationMinutes <= 0 || 
@@ -28,9 +28,9 @@ export class VideoController {
         } catch (error) {
             next(error);
         }
-   }
+    }
 
-   // Retrieves a paginated list of video resources
+   // Retrieves a paginated list of video resources.
     async findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             let page = 1;
@@ -55,7 +55,7 @@ export class VideoController {
 
             if (typeof req.query.sortBy === "string") {
                 sortBy = req.query.sortBy;
-           }
+            }
 
             if (req.query.order === "asc" || req.query.order === "desc") {
                 order = req.query.order;
@@ -100,12 +100,12 @@ export class VideoController {
 
             res.status(200).json(videos);
 
-      } catch (error) {
+        } catch (error) {
             next(error);
-      }
+        }
     }
   
-    // Retrieves a single video resource by its unique identifier
+    // Retrieves a single video resource by its unique identifier.
     async findOne(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { id } = req.params;
@@ -137,7 +137,7 @@ export class VideoController {
         }
     }
 
-    // Retrieve counts of genres
+    // Retrieve counts of genres.
     async genres(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const counts = await videoService.genres();

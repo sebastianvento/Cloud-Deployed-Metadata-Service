@@ -1,14 +1,14 @@
-import { Video, IVideo} from "../models/video.model";
+import { Video, IVideo } from "../models/video.model";
 import { VideoQueryOptions, PaginatedVideos } from "../services/video.service";
 
 export class VideoRepository {
-    // Creates a new video
+    // Creates a new video.
     async create(data: Partial<IVideo>): Promise<IVideo> {
         const video = new Video(data);
         return await video.save();
     }
   
-    // Retrieve video entities
+    // Retrieve video entities.
     async findAll(parameters: Partial<VideoQueryOptions>): Promise<PaginatedVideos> {
         const page = parameters.page ?? 1;
         const limit = parameters.limit ?? 10;
@@ -48,9 +48,9 @@ export class VideoRepository {
         const direction = order === "asc" ? 1 : -1;
 
         const data = await Video.find(filters)
-        .sort({ [sortBy]: direction })
-        .skip(skipped)
-        .limit(limit);
+            .sort({ [sortBy]: direction })
+            .skip(skipped)
+            .limit(limit);
  
         const dataset: PaginatedVideos = {
             data,
@@ -63,11 +63,12 @@ export class VideoRepository {
         return dataset;
     }
 
-    // Retrieves video by id
+    // Retrieves video by id.
     async findOne(id: string): Promise<IVideo | null> {
         return Video.findById(id);
     }
-    // Retrieve video amount per genre
+
+    // Retrieve video amount per genre.
     async genres(): Promise<any[]> {
         const data = await Video.aggregate([
             { $unwind: "$genres" },

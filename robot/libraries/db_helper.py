@@ -36,6 +36,8 @@ def video_exists(title):
 
 def legacy_video_exists(title):
 
+    # Function: connect() | Provider: psycopg
+    # Why: Establishes a connection to the PostgreSQL database using environment-based configuration.
     conn = psycopg.connect(
         user=os.getenv("PGUSER"),
         password=os.getenv("PGPASSWORD"),
@@ -44,15 +46,26 @@ def legacy_video_exists(title):
         dbname=os.getenv("PGDATABASE")
     )
 
+    # Method: .cursor() | Provider: psycopg Connection
+    # Why: Creates a cursor object used to execute SQL statements.
     cursor = conn.cursor()
 
+    # Method: .execute() | Provider: psycopg Cursor
+    # Why: Executes a parameterized SQL query against the database.
     cursor.execute(
         "SELECT title FROM videos WHERE title = %s",
         (title,)
     )
 
+    # Method: .fetchone() | Provider: psycopg Cursor
+    # Why: Returns the first matching row as a tuple, or None if no row exists.
     result = cursor.fetchone()
 
+    # Method: .close() | Provider: psycopg Connection
+    # Why: Releases the database connection and associated resources.
     conn.close()
 
+    # Logic: Identity check.
+    # Why: 'is not None' is the Pythonic way to perform a null check.
+    # TS Equivalent: return result !== null;
     return result is not None

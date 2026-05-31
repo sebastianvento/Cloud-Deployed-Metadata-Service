@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Integration tests verifying correct behavior of
+Documentation     Integration tests validating correct behavior of
 ...               genres endpoint.
 
 Resource          ../resources/api_keywords.robot

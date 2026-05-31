@@ -1,12 +1,12 @@
 *** Settings ***
-Documentation     API integration tests validating filtering behavior
+Documentation     Integration tests validating filtering behavior
 ...               of the video retrieval endpoint.
 
 Resource          ../resources/api_keywords.robot
 
 *** Test Cases ***
 Fetch With Filter
-    [Documentation]    Ensures that the API returns a dataset with correct filtering.
+    [Documentation]    Validates that the API returns a dataset with correct filtering.
 
     [Tags]    api    filtering
 
@@ -16,7 +16,6 @@ Fetch With Filter
 
     # Initializing filter
     ${genre}    Set Variable    action
-
     ${params}=    Create Dictionary    genres=${genre}
     ${response}=    GET On Session    api    /videos    params=${params}    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}
@@ -26,7 +25,7 @@ Fetch With Filter
     END
 
 Fetch With Multiple Filters
-    [Documentation]    Ensures that the API returns a dataset with correct multifiltering.
+    [Documentation]    Validates that the API returns a dataset with correct multifiltering.
 
     [Tags]    api    filtering
 
@@ -37,7 +36,6 @@ Fetch With Multiple Filters
     # Initializing filter
     ${genre}    Set Variable    action
     ${durationMin}    Set Variable    120
-
     ${params}=    Create Dictionary    genres=${genre}    durationMin=${durationMin}
     ${response}=    GET On Session    api    /videos    params=${params}    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}
@@ -48,7 +46,7 @@ Fetch With Multiple Filters
     END
 
 Fetch With Invalid Filter
-    [Documentation]    Ensures that system returns empty dataset caused by invalid filtering.
+    [Documentation]    Validates that system returns empty dataset caused by invalid filtering.
 
     [Tags]    api    filtering
 
@@ -58,7 +56,6 @@ Fetch With Invalid Filter
 
     # Initializing filter
     ${invalidGenre}    Set Variable    invalidgenre
-
     ${params}=    Create Dictionary    genres=${invalidGenre}
     ${response}=    GET On Session    api    /videos    params=${params}    headers=${h1}
     ${video_data}=    Set Variable    ${response.json()}

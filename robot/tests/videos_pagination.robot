@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation     Integration tests validating pagination behavior of the
-...               video listing endpoint. Tests verify correct page slicing,
+...               video listing endpoint. Tests validate correct page slicing,
 ...               sorting consistency, boundary conditions, and fallback
 ...               handling for invalid query parameters.
 
@@ -9,7 +9,7 @@ Resource          ../resources/api_keywords.robot
 
 *** Test Cases ***
 Check That Pagination Is Consistent
-    [Documentation]    Ensures pagination parameters correctly slice the dataset
+    [Documentation]    Validates pagination parameters correctly slice the dataset
     ...                and that page offsets correspond to the expected sorted
     ...                positions in the full dataset.
 
@@ -36,7 +36,7 @@ Check That Pagination Is Consistent
     ${compare_response}=    GET On Session    api    /videos    params=${compare_params}    headers=${h1}
     ${compare_video_data}=    Set Variable    ${compare_response.json()}
 
-    # Verify page offset matches the correct slice of the sorted dataset
+    # Validate page offset matches the correct slice of the sorted dataset
     Should Be Equal    ${video_data}[data][0][title]      ${compare_video_data}[data][3][title]
     Should Be Equal    ${video_data}[data][1][title]      ${compare_video_data}[data][4][title]
     Should Be Equal    ${video_data}[data][2][title]      ${compare_video_data}[data][5][title]
@@ -66,7 +66,7 @@ Check That Pagination Is Consistent
 
 
 Fetch Videos With Invalid Metainformation
-    [Documentation]    Verifies that invalid pagination parameters fall back
+    [Documentation]    Validates that invalid pagination parameters fall back
     ...                to safe defaults defined by the API implementation.
 
     [Tags]    api    pagination

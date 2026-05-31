@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     API integration tests validating error-handling behavior
+Documentation     Integration tests validating error-handling behavior
 ...               of the video retrieval endpoint.
 
 Resource          ../resources/api_keywords.robot
@@ -7,7 +7,7 @@ Resource          ../resources/api_keywords.robot
 
 *** Test Cases ***
 Fetch With Invalid Id
-    [Documentation]    Ensures that the API returns an HTTP 400 error when an
+    [Documentation]    Validates that the API returns an HTTP 400 error when an
     ...                invalid video identifier is provided.
 
     [Tags]    api    error-handling
@@ -25,7 +25,7 @@ Fetch With Invalid Id
 
 
 Fetch With Valid Id But Resource Does Not Exists
-    [Documentation]    Ensures that the API returns HTTP 404 when a syntactically
+    [Documentation]    Validates that the API returns HTTP 404 when a syntactically
     ...                valid identifier is provided but the resource does not exist.
 
     [Tags]    api    error-handling

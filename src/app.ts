@@ -5,22 +5,22 @@ import { rateLimiter } from "./middleware/rate.limiter.middleware";
 
 const app = express();
 
-// Parse incoming JSON request bodies
+// Parse incoming JSON request bodies.
 app.use(express.json());
 
-// Health check endpoint for monitoring and container orchestration
+// Health check endpoint for monitoring and container orchestration.
 app.get("/health", (_req, res) => {
     res.status(200).json({ status: "ok" });
 });
 
-// Rate limiter
+// Apply rate limiting to video endpoints.
 app.use("/videos", rateLimiter);
 
-// Register video-related routes
+// Register video-related routes.
 app.use("/videos", videoRoutes);
 
 
-// Centralized error handling middleware (must be last)
+// Centralized error handling middleware. (must be last)
 app.use(errorHandler);
 
 export default app;

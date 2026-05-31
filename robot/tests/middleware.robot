@@ -1,12 +1,12 @@
 *** Settings ***
-Documentation     API integration tests validating middleware
+Documentation     Integration tests validating middleware
 ...               
 
 Resource          ../resources/api_keywords.robot
 
 *** Test Cases ***
 Test Rate Limiter
-    [Documentation]    Ensures that the API limits requests accordingly
+    [Documentation]    Validates that the API limits requests accordingly
 
     [Tags]    api    limiter    limiting
 

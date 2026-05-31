@@ -3,26 +3,25 @@ import { VideoController } from "../controllers/video.controller";
 
 const router = Router();
 
-// Controller instance handling video-related business logic
+// Controller instance handling video-related business logic.
 const controller = new VideoController();
 
-// Create a new video resource
+// Create a new video resource.
 router.post("/", (req, res, next) =>
     controller.create(req, res, next)
 );
 
-// Retrieve video resources
-// Controller returned promise is ignored
+// Retrieve video resources.
 router.get("/", (req, res, next) =>
     controller.findAll(req, res, next)
 );
 
-// Retrieve videos per genre
+// Retrieve videos per genre.
 router.get("/stats/genres", (req, res, next) =>
     controller.genres(req, res, next)
 );
 
-// Retrieve video by id
+// Retrieve video by id.
 router.get("/:id", (req, res, next) =>
     controller.findOne(req, res, next)
 );

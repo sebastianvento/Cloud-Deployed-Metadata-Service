@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
+// Limits the rate to protect performance.
 export function rateLimiter(
     req: Request,
     res: Response,
@@ -9,7 +10,7 @@ export function rateLimiter(
     const ip = Array.isArray(raw) ? raw[0] : (raw ?? req.ip!);
     if (rateMap.has(ip)) {
         let current = rateMap.get(ip)!;
-        let currentTime = Date.now();
+        const currentTime = Date.now();
         let calc = 60;
         let diffInMillis = 60000;
 
