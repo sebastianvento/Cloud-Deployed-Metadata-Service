@@ -20,7 +20,7 @@ app.use("/videos", rateLimiter);
 app.use("/videos", videoRoutes);
 
 
-// Centralized error handling middleware. (must be last)
+// Centralized error handling middleware.
 app.use(errorHandler);
 
 export default app;
