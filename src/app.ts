@@ -13,7 +13,7 @@ app.get("/health", (_req, res) => {
     res.status(200).json({ status: "ok" });
 });
 
-// Apply rate limiting to video endpoints.
+// Apply rate limiter to video endpoints.
 app.use("/videos", rateLimiter);
 
 // Register video-related routes.
